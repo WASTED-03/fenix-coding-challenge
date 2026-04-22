@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: ingestion-service
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3307/ingestion_db?allowPublicKeyRetrieval=true&useSSL=false
+    username: root
+    password: arnavaru03
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update # Automatically creates tables based on your Entities
+    show-sql: true
+  mvc:
+    problem-details:
+      enabled: true # RFC 7807 Error standard

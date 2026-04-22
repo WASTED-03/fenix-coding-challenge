@@ -1,48 +1,123 @@
-# Multi-tenant Commerce Ingestion API
+# Multi-Tenant Commerce Ingestion API
 
-A production-grade Java Spring Boot ingestion layer designed to process orders and fulfillments across multiple organizations (tenants) with strict data isolation.
+A production-ready Java Spring Boot ingestion service designed to handle
+high-throughput order and fulfillment processing for multiple
+organizations (tenants). The system enforces strict data isolation using
+a hierarchical domain model.
 
-##  Architectural Highlights
+------------------------------------------------------------------------
 
-* **API-First Design**: 100% compliance with the OpenAPI 3.0 specification.
-* **Strict Multi-Tenancy**: Implemented using **Hibernate 6 `@TenantId`**. Data is mathematically isolated at the database level, ensuring Organization A can never access Organization B's data.
-* **Identity-Bound Isolation**: Tenant IDs are derived from the authenticated **Spring Security** Principal, preventing "Tenant Spoofing."
-* **Event-Driven Ingestion**: Uses `@Async` and `ApplicationEventPublisher` to process order data in the background, maintaining low-latency API responses.
-* **Performance Optimization**: Integrated **Spring Cache** to reduce database IOPS for read-heavy website and organization lookups.
-* **Professional Error Handling**: Implements **RFC 7807 Problem Details** for standardized JSON error responses.
+## 🚀 Architecture Highlights
 
-##  Tech Stack
+### Strict Multi-Tenancy (Hibernate 6)
 
-* **Java 17** & **Spring Boot 3.x**
-* **Spring Data JPA** & **Hibernate 6**
-* **MySQL 8**
-* **Testcontainers** (for integration testing)
-* **Spring Security** (Basic Auth)
+-   Uses native `@TenantId` for automatic tenant-based query scoping\
+-   Ensures complete database-level isolation between organizations\
+-   Eliminates risk of cross-tenant data access
 
-##  Getting Started
+### Identity-Bound Security
+
+-   Integrated Spring Security with Basic Authentication\
+-   Tenant context derived from authenticated user\
+-   `X-Tenant-ID` header validated against user's assigned organization
+
+### Event-Driven Ingestion
+
+-   Asynchronous processing using `@Async` and
+    `ApplicationEventPublisher`\
+-   Order persistence decoupled from background workflows\
+-   Enables sub-100ms API response times under load
+
+### API-First Development
+
+-   Fully compliant with OpenAPI 3.0 specification\
+-   DTOs and controllers generated via Maven\
+-   Guarantees zero contract drift
+
+### Intelligent Caching
+
+-   Spring Cache used for read-heavy entities (Organizations, Websites)\
+-   Reduces database load under high concurrency
+
+### Standardized Error Handling
+
+-   Implements RFC 7807 Problem Details\
+-   Centralized exception handling via `@ControllerAdvice`\
+-   Clean, consistent JSON error responses
+
+------------------------------------------------------------------------
+
+## 🛠️ Tech Stack
+
+-   Java 17\
+-   Spring Boot 3.x, Spring Data JPA\
+-   Spring Security (Basic Auth)\
+-   MySQL 8.0\
+-   JUnit 5, Testcontainers\
+-   Maven
+
+------------------------------------------------------------------------
+
+## ⚙️ Getting Started
 
 ### Prerequisites
-* Docker Desktop (Required for MySQL and Testcontainers)
-* Java 17+
 
-### Running the App
-1. Start the database:
-   ```bash
-   docker-compose up -d
-Build and run:
+-   Docker Desktop\
+-   Java 17 or higher
 
-Bash
+------------------------------------------------------------------------
+
+### Start Database
+
+``` bash
+docker-compose up -d
+```
+
+------------------------------------------------------------------------
+
+### Build and Run Application
+
+``` bash
 mvn clean spring-boot:run
-Running Tests
-To verify the multi-tenant isolation logic against a real MySQL instance:
+```
 
-Bash
+------------------------------------------------------------------------
+
+### Run Integration Tests
+
+``` bash
 mvn test
- Test Credentials-
-Use the following credentials for API testing:
+```
 
-  •Username: admin@acme.com
+------------------------------------------------------------------------
 
-  •Password: password123
+## 🔐 API Usage
 
-  •Tenant Header: X-Tenant-ID: [Organization-UUID]
+### Authentication
+
+-   Username: admin@acme.com\
+-   Password: password123
+
+------------------------------------------------------------------------
+
+### Required Header
+
+    X-Tenant-ID: <Organization UUID>
+
+------------------------------------------------------------------------
+
+### Sample Workflow
+
+1.  POST /organizations\
+2.  POST /organizations/{orgId}/websites\
+3.  POST /orders
+
+------------------------------------------------------------------------
+
+## 📂 Project Structure
+
+    com.commerce.ingestion
+    ├── tenant
+    ├── config
+    ├── service
+    ├── api

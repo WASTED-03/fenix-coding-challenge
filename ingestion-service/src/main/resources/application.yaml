@@ -4,7 +4,7 @@ spring:
   datasource:
     url: jdbc:mysql://127.0.0.1:3307/ingestion_db?allowPublicKeyRetrieval=true&useSSL=false
     username: root
-    password: arnavaru03
+    password: "SQL PASSWORD"
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
